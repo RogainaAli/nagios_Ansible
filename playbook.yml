@@ -1,0 +1,25 @@
+---
+- hosts: nagios_clients
+  remote_user: rogaina
+  become: true
+
+  vars_files:
+    - Authentication
+
+  roles:
+    - nrpe
+
+- hosts: nagios_servers
+  remote_user: rogaina
+  become: true
+
+  vars_files:
+    - Authentication
+
+  vars:
+    - nagios_client_hostname: Ansible_nagios_client
+    - nagios_client_ipaddress: "        address                 192.168.102.147"
+
+  roles:
+    - nagios_server
+

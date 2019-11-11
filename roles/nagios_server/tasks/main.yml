@@ -1,0 +1,28 @@
+---
+- name: copy Ansible_nagios_client.cfg ( main configuration file )
+  copy:
+    src: /home/rogaina/nagios/roles/nagios_server/tasks/Ansible_nagios_client.cfg
+    dest: /usr/local/nagios/etc/servers/
+    mode: '0664'
+
+
+- name: add Nagios client hostname
+  replace:
+    path: /usr/local/nagios/etc/servers/Ansible_nagios_client.cfg
+    regexp: 'ubuntu'
+    replace: "{{ nagios_client_hostname }}"
+
+- name: add Nagios client ip address
+  lineinfile:
+    path: /usr/local/nagios/etc/servers/Ansible_nagios_client.cfg
+    regexp: '^        address*'
+    line: "{{ nagios_client_ipaddress }}"
+
+- name: Restart service nagios, in all cases
+  service:
+    name: nagios
+    state: restarted
+
+
+
+

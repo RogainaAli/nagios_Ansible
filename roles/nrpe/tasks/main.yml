@@ -1,0 +1,60 @@
+---
+- name: apt-get update the server
+  apt: update_cache=yes
+
+- name: Install Nrpe & nagios packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - nagios-nrpe-server 
+    - nagios-plugins
+
+- name: Enable service nagios-nrpe-server
+  service:
+    name: nagios-nrpe-server
+    enabled: yes
+
+- name: backup the old version of nrpe.cfg 
+  command: mv /etc/nagios/nrpe.cfg /etc/nagios/nrpe.cfg_old
+
+- name: copy nrpe.cfg ( main configuration file )
+  copy:
+    src: /home/rogaina/nagios/roles/nrpe/tasks/nrpe.cfg
+    dest: /etc/nagios/nrpe.cfg
+    mode: '0664'
+
+
+- name: add Nagios Server IP
+  lineinfile:
+    path: /etc/nagios/nrpe.cfg
+    regexp: '^allowed_hosts=.*'
+    line: allowed_hosts=192.168.102.141
+
+- name: To allow command arguments
+  lineinfile:
+    path: /etc/nagios/nrpe.cfg
+    regexp: '^dont_blame_nrpe=.*'
+    line: dont_blame_nrpe=1
+
+- name: copy some plugins
+  copy:
+    src: "{{ item }}"
+    dest: /usr/lib/nagios/plugins
+    mode: '0775'
+  with_items:
+    - "/home/rogaina/nagios/roles/nrpe/tasks/plugins/check_cpu.sh"
+    - "/home/rogaina/nagios/roles/nrpe/tasks/plugins/check_mem.pl"
+    - "/home/rogaina/nagios/roles/nrpe/tasks/handlers_scripts/clear_cache.sh"
+    - "/home/rogaina/nagios/roles/nrpe/tasks/handlers_scripts/disk_space.sh"
+    - "/home/rogaina/nagios/roles/nrpe/tasks/handlers_scripts/load_handler.sh"
+    - "/home/rogaina/nagios/roles/nrpe/tasks/handlers_scripts/users.sh"
+
+- name: Restart service nagios_nrpe_server, in all cases
+  service:
+    name: nagios-nrpe-server
+    state: restarted
+
+
+
+
