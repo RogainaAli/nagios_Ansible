@@ -20,7 +20,7 @@
 
 - name: copy nrpe.cfg ( main configuration file )
   copy:
-    src: /home/rogaina/nagios/roles/nrpe/tasks/nrpe.cfg
+    src: roles/nrpe/tasks/nrpe.cfg
     dest: /etc/nagios/nrpe.cfg
     mode: '0664'
 
@@ -43,12 +43,12 @@
     dest: /usr/lib/nagios/plugins
     mode: '0775'
   with_items:
-    - "/home/rogaina/nagios/roles/nrpe/tasks/plugins/check_cpu.sh"
-    - "/home/rogaina/nagios/roles/nrpe/tasks/plugins/check_mem.pl"
-    - "/home/rogaina/nagios/roles/nrpe/tasks/handlers_scripts/clear_cache.sh"
-    - "/home/rogaina/nagios/roles/nrpe/tasks/handlers_scripts/disk_space.sh"
-    - "/home/rogaina/nagios/roles/nrpe/tasks/handlers_scripts/load_handler.sh"
-    - "/home/rogaina/nagios/roles/nrpe/tasks/handlers_scripts/users.sh"
+    - roles/nrpe/tasks/plugins/check_cpu.sh"
+    - "roles/nrpe/tasks/plugins/check_mem.pl"
+    - "roles/nrpe/tasks/handlers_scripts/clear_cache.sh"
+    - "roles/nrpe/tasks/handlers_scripts/disk_space.sh"
+    - "roles/nrpe/tasks/handlers_scripts/load_handler.sh"
+    - "roles/nrpe/tasks/handlers_scripts/users.sh"
 
 - name: Restart service nagios_nrpe_server, in all cases
   service:
