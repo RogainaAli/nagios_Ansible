@@ -1,7 +1,7 @@
 ---
 - name: copy Ansible_nagios_client.cfg ( main configuration file )
   copy:
-    src: /home/rogaina/nagios/roles/nagios_server/tasks/Ansible_nagios_client.cfg
+    src: roles/nagios_server/tasks/Ansible_nagios_client.cfg
     dest: /usr/local/nagios/etc/servers/
     mode: '0664'
 
